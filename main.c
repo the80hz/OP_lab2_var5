@@ -1,20 +1,22 @@
-/* Вычислить функцию cos(x), представленную в виде ряда Маклорена
- * с заданной точностью eps>0 или с числом членов разложения n>10.
- * cosx=∑_(n=1)^∞▒(-1)^n * x^2n/(2n)!
- * Используя полученный результат, вычислить все функции заданного угла
- * sin(x), tg(x), ctg(x) и вывести их на экран.
- */
-
 #include <stdio.h>
 #include <math.h>
+#include <locale.h>
+
+double factorial(int n) {
+    double f = 1;
+    for (int i = 1; i <= n; i++) {
+        f *= i;
+    }
+    return f;
+}
 
 int main()
 {
+    setlocale(LC_ALL, "Russian");
     int n = 10, x;
     double eps;
     double cosx, sinx, tgx, ctgx;
     double sum = 0;
-    double fact = 1;
 
     printf("Выберите действие:\n1. Число членов разложение N > 10\n2. Точность вычислений eps > 0.\n");
     int choice;
@@ -28,13 +30,17 @@ int main()
             }
             printf("Введите угол x в радианах: ");
             scanf("%d", &x);
-
-            for(int i = 1; i <= n; i++) {
-                fact *= 2 * i * (2 * i - 1);
-                sum += pow(-1, i) * pow(x, 2 * i) / fact;
-                printf("cosx = %lf\tn = %d\n", sum, i);
+            for (int i = 1; i <= n; i++) {
+                sum += pow(-1, i) * pow(x, 2 * i) / factorial(2 * i);
+                printf("n = %d\tcos(%d) = %f\t\n", i, x, sum);
             }
+            cosx = sum;
+            sinx = sqrt(1 - pow(cosx, 2));
+            tgx = sinx / cosx;
+            ctgx = cosx / sinx;
+            printf("\nsin(%d) = %f\ntg(%d) = %f\nctg(%d) = %f\n", x, sinx, x, tgx, x, ctgx);
             break;
+
         case 2:
             while(eps <= 0) {
                 printf("Введите точность вычислений eps > 0: ");
@@ -42,17 +48,22 @@ int main()
             }
             printf("Введите угол x в радианах: ");
             scanf("%d", &x);
-
-            for(int i = 1; fabs(pow(-1, i) * pow(x, 2 * i) / fact) > eps; i++) {
-                fact *= 2 * i * (2 * i - 1);
-                sum += pow(-1, i) * pow(x, 2 * i) / fact;
-                printf("cosx = %lf\n", sum);
+            for (int i = 1; i <= n; i++) {
+                sum += pow(-1, i) * pow(x, 2 * i) / factorial(2 * i);
+                printf("n = %d\tcos(%d) = %f\t\n", i, x, sum);
+                if (fabs(cos(x) - sum) < eps) {
+                    break;
+                }
             }
+            cosx = sum;
+            sinx = sqrt(1 - pow(cosx, 2));
+            tgx = sinx / cosx;
+            ctgx = cosx / sinx;
+            printf("\nsin(%d) = %f\ntg(%d) = %f\nctg(%d) = %f\n", x, sinx, x, tgx, x, ctgx);
             break;
         default:
             printf("Неверный ввод.\n");
             break;
     }
-
     return 0;
 }
