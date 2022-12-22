@@ -1,14 +1,5 @@
-/* Вычислить функцию cos(x), представленную в виде ряда Маклорена с заданной точностью eps > 0 или
- * с заданным числом членов разложения N>10.
- * cos⁡x=∑_(n=0)^∞▒〖-1〗^n   x^(2n+1)/(2n+1)!
- * Используя полученный результат вычислить: sin(x) tg(x) ctg(x).
- * После каждого шага выводить текущее значение функции и текущее значение шага.
- */
-
-
 #include <stdio.h>
 #include <math.h>
-#include <locale.h>
 
 double factorial(int n) {
     double f = 1;
@@ -20,7 +11,6 @@ double factorial(int n) {
 
 int main()
 {
-    setlocale(LC_ALL, "Russian");
     printf("Select an action:\n1. The number of expansion terms N > 10\n 2. The accuracy of eps calculations > 0.\n");
     int choice;
     scanf("%d", &choice);
